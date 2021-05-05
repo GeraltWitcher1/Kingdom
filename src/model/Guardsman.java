@@ -21,7 +21,7 @@ public class Guardsman implements TreasureRoomDoor
     this.treasureRoom = treasureRoom;
   }
 
-  private synchronized String getName() {
+  private String getName() {
     return Thread.currentThread().getName();
   }
 
@@ -37,6 +37,7 @@ public class Guardsman implements TreasureRoomDoor
       }
     }
     waitingTransporters--;
+    Log.getLog().addLog(getName() + " entered treasury");
     transporters++;
     treasureRoom.depositValuables(valuableList);
   }
@@ -51,7 +52,6 @@ public class Guardsman implements TreasureRoomDoor
       }
     }
     treasureRoom.returnValuables(valuableList);
-    System.out.println("valuables returned");
   }
 
   @Override public synchronized Valuable retrieveValuable() {
@@ -67,7 +67,7 @@ public class Guardsman implements TreasureRoomDoor
     }
     kingIsWaiting = false;
     king = true;
-    Log.getLog().addLog(getName() + " gathered the valuable");
+    //Log.getLog().addLog(getName() + " gathered the valuable");
     return treasureRoom.retrieveValuable();
   }
 
@@ -81,9 +81,9 @@ public class Guardsman implements TreasureRoomDoor
       catch (InterruptedException e) {
         e.printStackTrace();
       }
-      accountants++;
-      Log.getLog().addLog(getName() + " counting");
     }
+    accountants++;
+    Log.getLog().addLog(getName() + " entered the treasury");
     return treasureRoom.lookAtTreasures();
   }
 
@@ -92,7 +92,7 @@ public class Guardsman implements TreasureRoomDoor
     if (accountants == 0) {
       notifyAll();
     }
-    Log.getLog().addLog(getName() + " finished counting");
+    Log.getLog().addLog(getName() + " left the treasury");
   }
 
   @Override public synchronized boolean isEmpty() {
@@ -102,7 +102,7 @@ public class Guardsman implements TreasureRoomDoor
   @Override public synchronized void leaveTreasuryTransporter() {
     transporters--;
     notifyAll();
-    Log.getLog().addLog(getName() + " finished business at the treasury");
+    Log.getLog().addLog(getName() + " left the treasury");
   }
 
   @Override public synchronized void leaveTreasuryKing() {

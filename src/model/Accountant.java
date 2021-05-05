@@ -24,10 +24,10 @@ public class Accountant implements Runnable
           e.printStackTrace();
         }
       }
-      Log.getLog().addLog("Accountant finished counting, result: "+ sum);
+      Log.getLog().addLog(Thread.currentThread().getName()+" finished counting, result: "+ sum);
       door.stopCounting();
       try {
-        Thread.sleep(20000);
+        Thread.sleep((int) ((Math.random() * (30000 - 10000)) + 10000));
       }
       catch (InterruptedException e) {
         e.printStackTrace();

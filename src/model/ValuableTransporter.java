@@ -19,10 +19,9 @@ public class ValuableTransporter implements Runnable
   @Override public void run() {
     while (true) {
       int gold = 0;
-      int goldMinimum = (int) ((Math.random() * (1000 - 500)) + 500);
+      int goldMinimum = (int) ((Math.random() * (1000 - 500)) + 500); //between 500 and 1000
       Log.getLog()
           .addLog(getName() + " started collecting, gold minimum: " + goldMinimum);
-
       while (gold <= goldMinimum) {
         Valuable valuable = deposit.dequeue();
         gold += valuable.getValue();

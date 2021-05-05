@@ -18,14 +18,14 @@ public class King implements Runnable
     while (true) {
       int gold = 0;
       int goldMinimum = (int) ((Math.random() * (4000 - 2000)) + 2000);
-      Log.getLog().addLog("The king started collecting, gold minimum: " + goldMinimum);
+      Log.getLog().addLog("The king wants to have a party, the party will cost: " + goldMinimum);
 
       while(gold <= goldMinimum){
         if(door.isEmpty()){
           break;
         }
         try {
-          Thread.sleep(200);
+          Thread.sleep(200); //time to pick up a new valuable
         }
         catch (InterruptedException e) {
           e.printStackTrace();
