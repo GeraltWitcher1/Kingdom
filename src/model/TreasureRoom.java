@@ -1,0 +1,55 @@
+package model;
+
+import utility.collection.ArrayList;
+
+public class TreasureRoom implements TreasureRoomDoor
+{
+  private ArrayList<Valuable> treasures;
+
+  public TreasureRoom() {
+    this.treasures = new ArrayList<>();
+  }
+
+  @Override public void depositValuables(ArrayList<Valuable> valuableList) {
+    for (int i = 0; i < valuableList.size(); i++) {
+      treasures.add(valuableList.get(i));
+    }
+  }
+
+  @Override public void returnValuables(ArrayList<Valuable> valuableList) {
+    System.out.println(valuableList);
+    for (int i = 0; i < valuableList.size(); i++) {
+      treasures.add(valuableList.get(i));
+    }
+  }
+
+  @Override public Valuable retrieveValuable() {
+    return treasures.remove(0);
+  }
+
+  @Override public void leaveTreasuryTransporter() {
+    //not used
+  }
+
+  @Override public void leaveTreasuryKing() {
+    //not used
+  }
+
+  @Override public void stopCounting() {
+    //not used
+  }
+
+  @Override public boolean isEmpty() {
+    return treasures.size() == 0;
+  }
+
+  @Override public ArrayList<Valuable> lookAtTreasures() {
+    //returns a copy for view-only security
+    ArrayList<Valuable> temp = new ArrayList<>();
+    for (int i = 0; i < treasures.size(); i++) {
+      temp.add(treasures.get(i));
+    }
+    return temp;
+  }
+
+}

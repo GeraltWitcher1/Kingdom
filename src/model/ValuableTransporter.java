@@ -8,9 +8,11 @@ public class ValuableTransporter implements Runnable
 {
   private QueueADT<Valuable> deposit;
   private ArrayList<Valuable> valuableList;
+  private TreasureRoomDoor door;
 
-  public ValuableTransporter(QueueADT<Valuable> queue) {
+  public ValuableTransporter(QueueADT<Valuable> queue, TreasureRoomDoor door) {
     this.deposit = queue;
+    this.door = door;
     this.valuableList = new ArrayList<>();
   }
 
@@ -18,19 +20,25 @@ public class ValuableTransporter implements Runnable
     while (true) {
       int gold = 0;
       int goldMinimum = (int) ((Math.random() * (1000 - 500)) + 500);
-      Log.getLog().addLog(getName() + " started collecting, gold minimum: " + goldMinimum);
+      Log.getLog()
+          .addLog(getName() + " started collecting, gold minimum: " + goldMinimum);
 
       while (gold <= goldMinimum) {
         Valuable valuable = deposit.dequeue();
         gold += valuable.getValue();
-        valuableList.add(valuable);
+        valuableList.add(0,valuable);
       }
+      Log.getLog().addLog(
+          getName() + " collected the valuables, moving to treasury, treasure list: "
+              + valuableList + " total gold value: " + gold);
 
-      Log.getLog().addLog(getName() + " collected the valuables, moving to treasury, treasure list: " + valuableList);
+      door.depositValuables(valuableList);
       valuableList = new ArrayList<>();
       try {
+        Thread.sleep(2000);
+        door.leaveTreasuryTransporter();
         Log.getLog().addLog(getName() + " going to rest");
-        Thread.sleep(20000);
+        Thread.sleep(8000);
       }
       catch (InterruptedException e) {
         e.printStackTrace();

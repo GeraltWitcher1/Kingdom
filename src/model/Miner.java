@@ -19,14 +19,14 @@ public class Miner implements Runnable
 
   @Override public void run() {
     while (true) {
-      Log.getLog().addLog(getName() + " is working");
+      //Log.getLog().addLog(getName() + " is working");
       int num = (int)(Math.random()*4);
       Valuable valuable = Valuable.getInstance(types[num]);
       Log.getLog().addLog(getName()+ " found " + valuable);
       queue.enqueue(valuable);
       try {
-        Log.getLog().addLog(getName() + " is going to rest");
-        Thread.sleep(10000);
+        //Log.getLog().addLog(getName() + " is going to rest");
+        Thread.sleep(5000);
       }
       catch (InterruptedException e) {
         e.printStackTrace();

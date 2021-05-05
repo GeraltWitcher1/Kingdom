@@ -35,6 +35,6 @@ public class Valuable
   }
 
   @Override public String toString() {
-    return "Valuable{" + "valuableType=" + valuableType + '}';
+    return String.format("valuable type: %s",valuableType);
   }
 }
