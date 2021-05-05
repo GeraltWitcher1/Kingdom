@@ -7,8 +7,8 @@ public class TestDeposit
     TreasureRoom treasureRoom = new TreasureRoom();
     TreasureRoomDoor door = new Guardsman(treasureRoom);
 
-    new Thread(new Miner(deposit),"Okika").start();
-    new Thread(new Miner(deposit),"Joseph").start();
+    new Thread(new Miner(deposit),"Miner1").start();
+    new Thread(new Miner(deposit),"Miner2").start();
 
     new Thread(new ValuableTransporter(deposit,door),"Tomas").start();
     new Thread(new ValuableTransporter(deposit,door),"Ion").start();

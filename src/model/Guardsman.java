@@ -42,7 +42,6 @@ public class Guardsman implements TreasureRoomDoor
   }
 
   @Override public synchronized void returnValuables (ArrayList<Valuable> valuableList) {
-    System.out.println(king);
     while(accountants > 0 || transporters > 0){
       try {
         wait();

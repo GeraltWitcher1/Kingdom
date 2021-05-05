@@ -1,10 +1,8 @@
 package model;
 
 import external.Log;
-import utility.collection.ArrayQueue;
 import utility.collection.QueueADT;
 
-import java.util.concurrent.BlockingQueue;
 
 public class Miner implements Runnable
 {

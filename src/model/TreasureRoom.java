@@ -11,15 +11,16 @@ public class TreasureRoom implements TreasureRoomDoor
   }
 
   @Override public void depositValuables(ArrayList<Valuable> valuableList) {
-    for (int i = 0; i < valuableList.size(); i++) {
-      treasures.add(valuableList.get(i));
+    int size = valuableList.size();
+    for (int i = 0; i < size; i++) {
+      treasures.add(valuableList.remove(0));
     }
   }
 
   @Override public void returnValuables(ArrayList<Valuable> valuableList) {
-    System.out.println(valuableList);
-    for (int i = 0; i < valuableList.size(); i++) {
-      treasures.add(valuableList.get(i));
+    int size = valuableList.size();
+    for (int i = 0; i < size; i++) {
+      treasures.add(valuableList.remove(0));
     }
   }
 

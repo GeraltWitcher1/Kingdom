@@ -29,11 +29,9 @@ public class ValuableTransporter implements Runnable
         valuableList.add(0,valuable);
       }
       Log.getLog().addLog(
-          getName() + " collected the valuables, moving to treasury, treasure list: "
-              + valuableList + " total gold value: " + gold);
+          getName() + " collected the valuables, moving to treasury, total gold value: " + gold);
 
       door.depositValuables(valuableList);
-      valuableList = new ArrayList<>();
       try {
         Thread.sleep(2000);
         door.leaveTreasuryTransporter();

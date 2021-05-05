@@ -41,7 +41,6 @@ public class King implements Runnable
       }else{
         Log.getLog().addLog("The king could not get enough money for the party :( Total gold gathered: " + gold);
         door.returnValuables(valuableList);
-        valuableList = new ArrayList<>();
       }
 
       door.leaveTreasuryKing();
