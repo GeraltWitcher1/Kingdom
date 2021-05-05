@@ -2,16 +2,15 @@ package model;
 
 import external.Log;
 import utility.collection.ArrayList;
-import utility.collection.ArrayQueue;
 import utility.collection.QueueADT;
 
 public class ValuableTransporter implements Runnable
 {
-  private QueueADT<Valuable> queue;
+  private QueueADT<Valuable> deposit;
   private ArrayList<Valuable> valuableList;
 
   public ValuableTransporter(QueueADT<Valuable> queue) {
-    this.queue = queue;
+    this.deposit = queue;
     this.valuableList = new ArrayList<>();
   }
 
@@ -22,7 +21,7 @@ public class ValuableTransporter implements Runnable
       Log.getLog().addLog(getName() + " started collecting, gold minimum: " + goldMinimum);
 
       while (gold <= goldMinimum) {
-        Valuable valuable = queue.dequeue();
+        Valuable valuable = deposit.dequeue();
         gold += valuable.getValue();
         valuableList.add(valuable);
       }
@@ -31,7 +30,7 @@ public class ValuableTransporter implements Runnable
       valuableList = new ArrayList<>();
       try {
         Log.getLog().addLog(getName() + " going to rest");
-        Thread.sleep(10000);
+        Thread.sleep(20000);
       }
       catch (InterruptedException e) {
         e.printStackTrace();

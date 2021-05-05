@@ -14,11 +14,11 @@ public class Deposit implements QueueADT<Valuable>
 
   @Override public synchronized void enqueue(Valuable element) {
     valuables.add(valuables.size(),element);
-    notifyAll();
+      notifyAll();
   }
 
   @Override public synchronized Valuable dequeue() {
-    if(isEmpty()) {
+    while(isEmpty()) {
       try {
         wait();
       }
