@@ -19,7 +19,7 @@ public class King implements Runnable
       int gold = 0;
       int goldMinimum = (int) ((Math.random() * (4000 - 2000)) + 2000);
       Log.getLog().addLog("The king wants to have a party, the party will cost: " + goldMinimum);
-
+      door.enterTreasuryWriter();
       while(gold <= goldMinimum){
         if(door.isEmpty()){
           break;
@@ -35,15 +35,18 @@ public class King implements Runnable
         valuableList.add(valuable);
       }
 
-      if(gold>=goldMinimum){
+      if (gold >= goldMinimum) {
         Log.getLog().addLog("The king is throwing a party! Total cost = " + gold);
         valuableList = new ArrayList<>(); //"throw away" the gold
-      }else{
-        Log.getLog().addLog("The king could not get enough money for the party :( Total gold gathered: " + gold);
-        door.returnValuables(valuableList);
+      }
+      else {
+        Log.getLog().addLog(
+            "The king could not get enough money for the party :( Total gold gathered: "
+                + gold);
+        door.depositValuables(valuableList);
       }
 
-      door.leaveTreasuryKing();
+      door.leaveTreasuryWriter();
       try {
         Thread.sleep(25000);
       }

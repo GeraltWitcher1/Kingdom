@@ -30,10 +30,11 @@ public class ValuableTransporter implements Runnable
       Log.getLog().addLog(
           getName() + " collected the valuables, moving to treasury, total gold value: " + gold);
 
+      door.enterTreasuryWriter();
       door.depositValuables(valuableList);
       try {
         Thread.sleep(2000);
-        door.leaveTreasuryTransporter();
+        door.leaveTreasuryWriter();
         Log.getLog().addLog(getName() + " going to rest");
         Thread.sleep(8000);
       }

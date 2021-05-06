@@ -17,27 +17,8 @@ public class TreasureRoom implements TreasureRoomDoor
     }
   }
 
-  @Override public void returnValuables(ArrayList<Valuable> valuableList) {
-    int size = valuableList.size();
-    for (int i = 0; i < size; i++) {
-      treasures.add(valuableList.remove(0));
-    }
-  }
-
   @Override public Valuable retrieveValuable() {
     return treasures.remove(0);
-  }
-
-  @Override public void leaveTreasuryTransporter() {
-    //not used
-  }
-
-  @Override public void leaveTreasuryKing() {
-    //not used
-  }
-
-  @Override public void stopCounting() {
-    //not used
   }
 
   @Override public boolean isEmpty() {
@@ -53,4 +34,19 @@ public class TreasureRoom implements TreasureRoomDoor
     return temp;
   }
 
+  @Override public void enterTreasuryWriter() {
+    //guardsman will handle
+  }
+
+  @Override public void enterTreasuryReader() {
+    //guardsman will handle
+  }
+
+  @Override public void leaveTreasuryWriter() {
+    //guardsman will handle
+  }
+
+  @Override public void leaveTreasuryReader() {
+    //guardsman will handle
+  }
 }

@@ -4,12 +4,13 @@ import utility.collection.ArrayList;
 
 public interface TreasureRoomDoor
 {
+
+  void enterTreasuryWriter();
+  void enterTreasuryReader();
+  void leaveTreasuryWriter();
+  void leaveTreasuryReader();
   void depositValuables(ArrayList<Valuable> valuableList);
-  void returnValuables(ArrayList<Valuable> valuableList);
-  Valuable retrieveValuable();
-  void leaveTreasuryTransporter();
-  void leaveTreasuryKing();
+  Valuable retrieveValuable();;
   ArrayList<Valuable> lookAtTreasures();
-  void stopCounting();
   boolean isEmpty();
 }

@@ -3,31 +3,29 @@ package model;
 import external.Log;
 import utility.collection.ArrayList;
 
+import java.util.HashMap;
+
 public class Guardsman implements TreasureRoomDoor
 {
-  private int accountants;
-  private int transporters;
-  private boolean king;
-  private boolean kingIsWaiting;
-  private int waitingTransporters;
+  private int readers;
+  private int writers;
+  private int waitingWriters;
   private TreasureRoom treasureRoom;
+  private HashMap<Thread,Boolean> hasWriteAccess;
+  private HashMap<Thread,Boolean> hasReadAccess;
 
   public Guardsman(TreasureRoom treasureRoom){
-    this.accountants = 0;
-    this.transporters = 0;
-    this.waitingTransporters = 0;
-    this.king = false;
-    this.kingIsWaiting = false;
+    this.readers = 0;
+    this.writers = 0;
+    this.waitingWriters = 0;
     this.treasureRoom = treasureRoom;
+    this.hasWriteAccess = new HashMap<>();
+    this.hasReadAccess = new HashMap<>();
   }
 
-  private String getName() {
-    return Thread.currentThread().getName();
-  }
-
-  @Override public synchronized void depositValuables(ArrayList<Valuable> valuableList) {
-    waitingTransporters++;
-    while(accountants > 0 || transporters > 0 || king || kingIsWaiting){
+  @Override public synchronized void enterTreasuryWriter() {
+    waitingWriters++;
+    while(readers > 0 || writers > 0){
       try {
         Log.getLog().addLog(getName() + " waiting to start depositing valuables");
         wait();
@@ -36,44 +34,14 @@ public class Guardsman implements TreasureRoomDoor
         e.printStackTrace();
       }
     }
-    waitingTransporters--;
+    waitingWriters--;
     Log.getLog().addLog(getName() + " entered treasury");
-    transporters++;
-    treasureRoom.depositValuables(valuableList);
+    writers++;
+    hasWriteAccess.put(Thread.currentThread(),true);
   }
 
-  @Override public synchronized void returnValuables (ArrayList<Valuable> valuableList) {
-    while(accountants > 0 || transporters > 0){
-      try {
-        wait();
-      }
-      catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
-    treasureRoom.returnValuables(valuableList);
-  }
-
-  @Override public synchronized Valuable retrieveValuable() {
-    kingIsWaiting = true;
-    while(accountants > 0 || transporters > 0){
-      try {
-        Log.getLog().addLog(getName() + " waiting to start partying");
-        wait();
-      }
-      catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
-    kingIsWaiting = false;
-    king = true;
-    //Log.getLog().addLog(getName() + " gathered the valuable");
-    return treasureRoom.retrieveValuable();
-  }
-
-
-  @Override public synchronized ArrayList<Valuable> lookAtTreasures() {
-    while(transporters > 0 || waitingTransporters > 0 || king || kingIsWaiting){
+  @Override public synchronized void enterTreasuryReader() {
+    while(writers > 0 || waitingWriters > 0){
       try {
         Log.getLog().addLog(getName() + " waiting to start counting");
         wait();
@@ -82,32 +50,50 @@ public class Guardsman implements TreasureRoomDoor
         e.printStackTrace();
       }
     }
-    accountants++;
+    readers++;
+    hasReadAccess.put(Thread.currentThread(),true);
     Log.getLog().addLog(getName() + " entered the treasury");
-    return treasureRoom.lookAtTreasures();
   }
 
-  @Override public synchronized void stopCounting() {
-    accountants--;
-    if (accountants == 0) {
+  @Override public synchronized void leaveTreasuryReader() {
+    readers--;
+    if (readers == 0) {
       notifyAll();
     }
     Log.getLog().addLog(getName() + " left the treasury");
+    hasReadAccess.replace(Thread.currentThread(),false);
   }
 
-  @Override public synchronized boolean isEmpty() {
+  @Override public synchronized void leaveTreasuryWriter() {
+    writers--;
+    notifyAll();
+    Log.getLog().addLog(getName() + " left the treasury");
+    hasWriteAccess.replace(Thread.currentThread(),false);
+  }
+
+  @Override public void depositValuables(ArrayList<Valuable> valuableList) {
+    if(hasWriteAccess.get(Thread.currentThread())){
+      treasureRoom.depositValuables(valuableList);
+    } else throw new IllegalStateException("No write access");  
+  }
+
+  @Override public Valuable retrieveValuable() {
+    if(hasWriteAccess.get(Thread.currentThread())){
+      return treasureRoom.retrieveValuable();
+    } else throw new IllegalStateException("No write access");
+  }
+
+  @Override public ArrayList<Valuable> lookAtTreasures() {
+    if(hasReadAccess.get(Thread.currentThread())){
+      return treasureRoom.lookAtTreasures();
+    } else throw new IllegalStateException("No read access");
+  }
+
+  @Override public boolean isEmpty() {
     return treasureRoom.isEmpty();
   }
 
-  @Override public synchronized void leaveTreasuryTransporter() {
-    transporters--;
-    notifyAll();
-    Log.getLog().addLog(getName() + " left the treasury");
-  }
-
-  @Override public synchronized void leaveTreasuryKing() {
-    king = false;
-    notifyAll();
-    Log.getLog().addLog(getName() + " left the treasury");
+  private String getName() {
+    return Thread.currentThread().getName();
   }
 }

@@ -14,6 +14,7 @@ public class Accountant implements Runnable
   @Override public void run() {
     while(true){
       int sum = 0;
+      door.enterTreasuryReader();
       ArrayList<Valuable> treasures = door.lookAtTreasures();
       for(int i = 0; i< treasures.size(); i++){
         sum+=treasures.get(i).getValue();
@@ -25,7 +26,9 @@ public class Accountant implements Runnable
         }
       }
       Log.getLog().addLog(Thread.currentThread().getName()+" finished counting, result: "+ sum);
-      door.stopCounting();
+      door.leaveTreasuryReader();
+      ArrayList<Valuable> treasures1 = door.lookAtTreasures();
+      System.out.println(treasures1);
       try {
         Thread.sleep((int) ((Math.random() * (30000 - 10000)) + 10000));
       }
