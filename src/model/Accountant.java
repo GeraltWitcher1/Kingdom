@@ -27,8 +27,6 @@ public class Accountant implements Runnable
       }
       Log.getLog().addLog(Thread.currentThread().getName()+" finished counting, result: "+ sum);
       door.leaveTreasuryReader();
-      ArrayList<Valuable> treasures1 = door.lookAtTreasures();
-      System.out.println(treasures1);
       try {
         Thread.sleep((int) ((Math.random() * (30000 - 10000)) + 10000));
       }
