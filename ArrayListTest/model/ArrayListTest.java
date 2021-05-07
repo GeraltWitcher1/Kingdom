@@ -14,16 +14,8 @@ class ArrayListTest<T>
 
   @BeforeEach void setUp()
   {
-    System.out.println("---> setUp()");
     list = new ArrayList<>();
     numberList = new ArrayList<>();
-  }
-
-  @AfterEach void tearDown()
-  {
-    System.out.println("<--- tearDown()");
-    // delete, remove, clear
-    // empty for now
   }
 
 
