@@ -694,8 +694,8 @@ class ArrayListTest<T>
 
   @Test void isFull()
   {
-    // when there are no elements is the list, this method should return false, but because it is unbounded true
-    assertTrue(list.isFull());
+    // when there are no elements is the list, this method should return false
+    assertFalse(list.isFull());
 
     // Returns true if this list is full but because the list is unbounded the method always return false ---> in ArrayList.java
     // but it overrides from the ListADT interface, where unbounded the method always return true
@@ -704,7 +704,7 @@ class ArrayListTest<T>
       list.add(
           "Good Evening!"); // creates arrayList of 10 "Good Evening!" elements
     }
-    assertTrue(list.isFull());
+    assertFalse(list.isFull());
 
     // there's no way to check the capacity of an arrayList - in javaDoc it's 16, in ArrayList.java it's 100!!!
   }
