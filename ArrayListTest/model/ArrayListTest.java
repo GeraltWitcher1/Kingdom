@@ -14,17 +14,10 @@ class ArrayListTest<T>
 
   @BeforeEach void setUp()
   {
-    System.out.println("---> setUp()");
     list = new ArrayList<>();
     numberList = new ArrayList<>();
   }
 
-  @AfterEach void tearDown()
-  {
-    System.out.println("<--- tearDown()");
-    // delete, remove, clear
-    // empty for now
-  }
 
 
   // --->>> following ZOMB-E for addIndex() method <<<--- //
@@ -694,7 +687,7 @@ class ArrayListTest<T>
 
   @Test void isFull()
   {
-    // when there are no elements is the list, this method should return false, but because it is unbounded true
+    // when there are no elements is the list, this method should return false
     assertTrue(list.isFull());
 
     // Returns true if this list is full but because the list is unbounded the method always return false ---> in ArrayList.java
