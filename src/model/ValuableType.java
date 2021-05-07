@@ -28,7 +28,7 @@ public enum ValuableType
         }
     };
 
-    private int value;
+    private final int value;
 
     ValuableType(int value){
       this.value = value;

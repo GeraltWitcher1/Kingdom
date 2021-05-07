@@ -4,7 +4,6 @@ import utility.collection.ArrayList;
 
 public interface TreasureRoomDoor
 {
-
   void enterTreasuryWriter();
   void enterTreasuryReader();
   void leaveTreasuryWriter();

@@ -27,7 +27,7 @@ public class Guardsman implements TreasureRoomDoor
     waitingWriters++;
     while(readers > 0 || writers > 0){
       try {
-        Log.getLog().addLog(getName() + " waiting to start depositing valuables");
+        Log.getLog().addLog(getName() + " waiting to enter the treasury");
         wait();
       }
       catch (InterruptedException e) {
