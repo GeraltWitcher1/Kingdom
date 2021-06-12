@@ -9,7 +9,7 @@ public interface TreasureRoomDoor
   void leaveTreasuryWriter();
   void leaveTreasuryReader();
   void depositValuables(ArrayList<Valuable> valuableList);
-  Valuable retrieveValuable();;
+  Valuable retrieveValuable();
   ArrayList<Valuable> lookAtTreasures();
   boolean isEmpty();
 }

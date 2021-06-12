@@ -11,16 +11,16 @@ public class Guardsman implements TreasureRoomDoor
   private int writers;
   private int waitingWriters;
   private TreasureRoom treasureRoom;
-  private HashMap<Thread,Boolean> hasWriteAccess;
-  private HashMap<Thread,Boolean> hasReadAccess;
+  private ArrayList<Thread> hasWriteAccess;
+  private ArrayList<Thread> hasReadAccess;
 
   public Guardsman(TreasureRoom treasureRoom){
     this.readers = 0;
     this.writers = 0;
     this.waitingWriters = 0;
     this.treasureRoom = treasureRoom;
-    this.hasWriteAccess = new HashMap<>();
-    this.hasReadAccess = new HashMap<>();
+    this.hasWriteAccess = new ArrayList<>();
+    this.hasReadAccess = new ArrayList<>();
   }
 
   @Override public synchronized void enterTreasuryWriter() {
@@ -37,7 +37,7 @@ public class Guardsman implements TreasureRoomDoor
     waitingWriters--;
     Log.getLog().addLog(getName() + " entered treasury");
     writers++;
-    hasWriteAccess.put(Thread.currentThread(),true);
+    hasWriteAccess.add(Thread.currentThread());
   }
 
   @Override public synchronized void enterTreasuryReader() {
@@ -51,7 +51,7 @@ public class Guardsman implements TreasureRoomDoor
       }
     }
     readers++;
-    hasReadAccess.put(Thread.currentThread(),true);
+    hasReadAccess.add(Thread.currentThread());
     Log.getLog().addLog(getName() + " entered the treasury");
   }
 
@@ -61,30 +61,30 @@ public class Guardsman implements TreasureRoomDoor
       notifyAll();
     }
     Log.getLog().addLog(getName() + " left the treasury");
-    hasReadAccess.replace(Thread.currentThread(),false);
+    hasReadAccess.remove(Thread.currentThread());
   }
 
   @Override public synchronized void leaveTreasuryWriter() {
     writers--;
     notifyAll();
     Log.getLog().addLog(getName() + " left the treasury");
-    hasWriteAccess.replace(Thread.currentThread(),false);
+    hasWriteAccess.remove(Thread.currentThread());
   }
 
   @Override public void depositValuables(ArrayList<Valuable> valuableList) {
-    if(hasWriteAccess.get(Thread.currentThread())){
+    if(hasWriteAccess.contains(Thread.currentThread())){
       treasureRoom.depositValuables(valuableList);
     } else throw new IllegalStateException("No write access");  
   }
 
   @Override public Valuable retrieveValuable() {
-    if(hasWriteAccess.get(Thread.currentThread())){
+    if(hasWriteAccess.contains(Thread.currentThread())){
       return treasureRoom.retrieveValuable();
     } else throw new IllegalStateException("No write access");
   }
 
   @Override public ArrayList<Valuable> lookAtTreasures() {
-    if(hasReadAccess.get(Thread.currentThread())){
+    if(hasReadAccess.contains(Thread.currentThread())){
       return treasureRoom.lookAtTreasures();
     } else throw new IllegalStateException("No read access");
   }
@@ -97,3 +97,4 @@ public class Guardsman implements TreasureRoomDoor
     return Thread.currentThread().getName();
   }
 }
+

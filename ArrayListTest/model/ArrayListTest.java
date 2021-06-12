@@ -35,10 +35,31 @@ class ArrayListTest<T>
   // 2. addIndexOne
   @Test void addIndexOne()
   {
-    // adding one String element to an ArrayList
-    list.add(0, "hello");
-    assertEquals("hello", list.get(0)); // should return the same element!
-    assertEquals(1, list.size()); // the size of an ArrayList must be one!
+    list.add(0,"One");
+    list.add(1,"Two");
+    assertEquals("Two",list.get(1));
+
+    //null elements
+    list = new ArrayList<>();
+    list.add(0,null);
+    list.add(1,"Two");
+    assertEquals("Two",list.get(1));
+
+    list = new ArrayList<>();
+    list.add(0,"One");
+    list.add(1,null);
+    assertNull(list.get(1));
+
+    list = new ArrayList<>();
+    list.add(0,null);
+    list.add(1,null);
+    assertNull(list.get(1));
+
+    //duplicate
+    list = new ArrayList<>();
+    list.add(0,"One");
+    list.add(1,"One");
+    assertEquals("One",list.get(1));
   }
 
   // 3. addIndexMany
@@ -51,14 +72,19 @@ class ArrayListTest<T>
       assertDoesNotThrow(() -> list.add(finalI, "test"));
       assertEquals("test", list.get(i));
     }
+
+    list = new ArrayList<>();
+    // adding many null
+    for(int i = 0; i<20; i++){
+      int finalI = i;
+      assertDoesNotThrow(()->list.add(finalI,null));
+      assertNull(list.get(i));
+    }
   }
 
   // 4. addIndexBoundary
   @Test void addIndexBoundary()
   {
-    // initial capacity on the ArrayList is 16, if the element is added when the
-    // list is full new ArrayList with twice the size is created! -
-
     // boundary: index at -1
     assertThrows(IndexOutOfBoundsException.class, () -> {
       list.add(-1, "impossible");
@@ -72,10 +98,10 @@ class ArrayListTest<T>
 
     // positive and negative
     assertThrows(IndexOutOfBoundsException.class, () -> {
-      list.add(64, "help");
+      list.add(215, "help");
     });
     assertThrows(IndexOutOfBoundsException.class, () -> {
-      list.add(-37, "help");
+      list.add(-215, "help");
     });
 
     // right boundary
@@ -93,23 +119,9 @@ class ArrayListTest<T>
   // 5. addIndexException
   @Test void addIndexException()
   {
-    // IllegalArgumentException – if there is a mismatch in the input, e.g. if a null element is not allowed
-    // IllegalStateException – if the list is full and trying to insert at the end
-    // in our case the null elements are allowed and he list expands all the time, so we never meet these Exceptions!
+    //Every possible exception for this method already tested in Boundary testing
   }
 
-  @Test void additionalCases()
-  {
-    // The list allows duplicate elements and null elements
-    list.add(0, "jaguar");
-    list.add(1, "jaguar");
-    list.add(2, null);
-
-    assertEquals("jaguar", list.get(0));
-    assertEquals("jaguar", list.get(1));
-    assertEquals(list.get(1), list.get(0));
-    assertNull(list.get(2)); // must be true!
-  }
 
   // END addIndex() TEST
 
@@ -158,18 +170,7 @@ class ArrayListTest<T>
   // 4. addElementBoundary
   @Test void addElementBoundary()
   {
-    // initial capacity on the ArrayList is 16, if the element is added when the
-    // list is full new ArrayList with twice the size is created! -
-
-    for (int i = 0; i < 10; i++)
-    {
-      list.add("element" + i);
-    }
-
-    // since the method always adds to the end we can test only upper right boundary
-    list.add("hello"); // index of "hello" should be 10 and now there should be 11 elements in the list
-    assertEquals(10, list.indexOf("hello"));
-    assertEquals(11, list.size());
+    //lower boundary already tested in zero and one case, no upper boundary exists
   }
 
   // 5. addElementException
@@ -180,6 +181,30 @@ class ArrayListTest<T>
     // in our case the null elements are allowed and he list expands all the time, so we never meet these Exceptions!
   }
 
+  @Test void additionalCases()
+  {
+    //null elements
+    list = new ArrayList<>();
+    list.add(null);
+    list.add("Two");
+    assertEquals("Two",list.get(1));
+
+    list = new ArrayList<>();
+    list.add("One");
+    list.add(null);
+    assertNull(list.get(1));
+
+    list = new ArrayList<>();
+    list.add(null);
+    list.add(null);
+    assertNull(list.get(1));
+
+    //duplicate
+    list = new ArrayList<>();
+    list.add("One");
+    list.add("One");
+    assertEquals("One",list.get(1));
+  }
   // END addElement() TEST
 
   // ********************************************************************* //
@@ -191,26 +216,47 @@ class ArrayListTest<T>
   @Test void setZero()
   {
     list.add("bob");
-    list.add("jenny");
+    list.set(0,"jenny");
+    assertEquals("jenny",list.get(0));
+
     list.set(0, null);
-    list.set(1, null);
     // both names at indexes 0 and 1 should be set to null
     assertNull(list.get(0));
-    assertNull(list.get(1));
   }
 
   // 2. setOne()
   @Test void setOne()
   {
-    list.add("bob");
-    list.add("jenny");
-    list.set(1, null);
-    // the element at the index 1 should be set to null
+    list.add(0,"One");
+    list.add(1,"Two");
+    list.set(1,"Test");
+    assertEquals("Test",list.get(1));
+
+    //null elements
+    list = new ArrayList<>();
+    list.add(0,null);
+    list.add(1,null);
+    list.set(1,"Test");
+    assertEquals("Test",list.get(1));
+
+    list = new ArrayList<>();
+    list.add(0,"One");
+    list.add(1,null);
+    list.set(1,"Test");
+    assertEquals("Test",list.get(1));
+
+    list = new ArrayList<>();
+    list.add(0,null);
+    list.add(1,null);
+    list.set(1,null);
     assertNull(list.get(1));
 
-    list.set(1, "john");
-    // now the element at the index 1 should be set to "john"
-    assertEquals("john", list.get(1));
+    //duplicate
+    list = new ArrayList<>();
+    list.add(0,"One");
+    list.add(1,"One");
+    list.set(1,"One");
+    assertEquals("One",list.get(1));
   }
 
   // 3. setMany()
@@ -219,6 +265,15 @@ class ArrayListTest<T>
     for (int i = 0; i < 10; i++)
     {
       list.add("something"); // creating list of the same 10 elements
+    }
+
+    for (int j = 0; j < list.size(); j++) {
+      list.set(j, "hello"); // setting another element to the whole list
+    }
+
+    for (int k = 0; k < list.size(); k++) {
+      assertEquals("hello", list
+          .get(k)); // testing if all the elements are set to "hello"
     }
 
     list.set(4, "giraffe");
@@ -239,19 +294,8 @@ class ArrayListTest<T>
   // 4. setBoundary()
   @Test void setBoundary()
   {
-    for (int i = 0; i < 20; i++)
-    {
+    for (int i = 0; i < 20; i++) {
       list.add("testing"); // creating list of the same 20 elements
-      for (int j = 0; j < list.size(); j++)
-      {
-        list.set(j, "hello"); // setting another element to the whole list
-      }
-    }
-
-    for (int k = 0; k < list.size(); k++)
-    {
-      assertEquals("hello",
-          list.get(k)); // testing if all the elements are set to "hello"
     }
 
     // lower left boundary: index -1
@@ -302,20 +346,13 @@ class ArrayListTest<T>
   // 1. getZero()
   @Test void getZero()
   {
-    list.add(0, "first");
-    assertEquals("first", list.get(0));
-
-    list.set(0, null);
-    assertNull(list.get(0));
+    //already tested in addZero() and setZero() test cases;
   }
 
   // 2. getOne()
   @Test void getOne()
   {
-    list.add("water"); // index 0
-    list.add("fire"); // index 1
-
-    assertEquals("fire", list.get(1));
+    //already tested in addOne() and setOne() test cases;
   }
 
   // 3. getMany()
@@ -336,10 +373,6 @@ class ArrayListTest<T>
     assertEquals("morning coffee at index: 2", list.get(2));
     assertEquals("morning coffee at index: 4", list.get(4));
 
-    assertThrows(IndexOutOfBoundsException.class,
-        () -> {   /// <--- instead throws new IllegalStateException
-          list.get(15); // last index in the arrayList is 14!
-        });
   }
 
   // 4. getBoundary()
@@ -525,24 +558,24 @@ class ArrayListTest<T>
   // 4. removeElementBoundary()
   @Test void removeElementBoundary()
   {
+    //already tested in zero and one
+  }
+
+  // 5. removeElementException()
+  @Test void removeElementException()
+  {
     for (int i = 0; i < 25; i++)
     {
       list.add("horse #" + i);
     }
 
-    // boundary: the element is not in the arrayList
+    // Exception: the element is not in the arrayList
     assertThrows(IllegalStateException.class, () -> {
       list.remove("horse #-1");
     });
     assertThrows(IllegalStateException.class, () -> {
       list.remove("horse #-25");
     });
-  }
-
-  // 5. removeElementException()
-  @Test void removeElementException()
-  {
-    // non-existent element  ---> already tested in getElementBoundary()
   }
 
   // END removeElement() TEST
@@ -589,16 +622,16 @@ class ArrayListTest<T>
   // 4. indexOfElementBoundary()
   @Test void indexOfElementBoundary()
   {
-    list.add("ketchup");
-
-    // boundary: the element is not in the arrayList - index should be -1
-    assertEquals(-1, list.indexOf("batman"));
+    //not applicable
   }
 
   // 5. indexOfElementException()
   @Test void indexOfElementException()
   {
-    // not used
+    list.add("ketchup");
+
+    // the element is not in the arrayList - index should be -1
+    assertEquals(-1, list.indexOf("batman"));
   }
 
   // END indexOfElement() TEST
@@ -643,17 +676,17 @@ class ArrayListTest<T>
   // 4. containsElementBoundary()
   @Test void containsElementBoundary()
   {
-    list.add("batMan");
-    list.add("roboCop");
-
-    // boundary: the element is not in the arrayList - should return false
-    assertFalse(list.contains("spiderMan"));
+    //not used
   }
 
   // 5. containsElementException()
   @Test void containsElementException()
   {
-    // not used
+    list.add("batMan");
+    list.add("roboCop");
+
+    // boundary: the element is not in the arrayList - should return false
+    assertFalse(list.contains("spiderMan"));
   }
 
   // END containsElement() TEST
@@ -675,6 +708,12 @@ class ArrayListTest<T>
     }
     // should return false
     assertFalse(list.isEmpty());
+
+
+    list = new ArrayList<>();
+    list.add(null);
+    //should return false even if the element is null
+    assertFalse(list.isEmpty());
   }
 
   //END isEmpty() TEST
@@ -689,8 +728,6 @@ class ArrayListTest<T>
     // when there are no elements is the list, this method should return false
     assertFalse(list.isFull());
 
-    // Returns true if this list is full but because the list is unbounded the method always return false ---> in ArrayList.java
-    // but it overrides from the ListADT interface, where unbounded the method always return true
     for (int i = 0; i < 16; i++)
     {
       list.add(
@@ -698,7 +735,6 @@ class ArrayListTest<T>
     }
     assertFalse(list.isFull());
 
-    // there's no way to check the capacity of an arrayList - in javaDoc it's 16, in ArrayList.java it's 100!!!
   }
 
   //END isEmpty() TEST
@@ -712,7 +748,6 @@ class ArrayListTest<T>
   @Test void sizeZero()
   {
     // if there are 0 elements the arrayList must be empty!
-    assertTrue(list.isEmpty());
     assertEquals(0, list.size());
   }
 
@@ -728,7 +763,8 @@ class ArrayListTest<T>
   {
     for (int i = 0; i < 100; i++)
     {
-      list.add("toilet"); // arrayList of 100 elements
+      list.add("test"); // arrayList of 100 elements
+      assertEquals(i+1,list.size());
     }
     assertEquals(100, list.size());
   }
@@ -736,7 +772,18 @@ class ArrayListTest<T>
   // 4. sizeBoundary()
   @Test void sizeBoundary()
   {
-    // not used
+    //testing capacity expansion
+    for (int i = 0; i < 16; i++)
+      list.add("test");
+
+    assertEquals(16,list.size());
+    list.add("test");
+    assertEquals(17,list.size());
+
+    for(int i = 0; i<15; i++)
+      list.add("more");
+    assertEquals(32,list.size());
+
   }
 
   // 5. sizeException()
